@@ -83,6 +83,34 @@ public class JobData {
 
         return jobs;
     }
+    /**
+     * Fetch list of all values from loaded data,
+     * without duplicates, for a given column.
+     *
+     * @param field The column to retrieve values from
+     * @return List of all of the values of the given field
+     */
+
+    public static ArrayList<String> findByValue(String field){
+        ArrayList<String> searchTerm = new ArrayList <>();
+
+        ArrayList<String> values = new ArrayList<>();
+
+        for (HashMap<String, String> row : allJobs) {
+
+            String aTerm = row.get(field);
+
+            if (!searchTerm.contains(aTerm)) {
+                searchTerm.add(aTerm);
+            }
+        }
+            return searchTerm;
+
+    }
+
+
+
+
 
     /**
      * Read in data from a CSV file and store it in a list
