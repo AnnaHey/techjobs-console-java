@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -42,6 +43,7 @@ public class JobData {
                 values.add(aValue);
             }
         }
+        Collections.sort(values);
 
         return values;
     }
@@ -62,7 +64,7 @@ public class JobData {
      * with "Enterprise Holdings, Inc".
      *
      * @param column   Column that should be searched.
-     * @param value Value of teh field to search for
+     * @param value Value of the field to search for
      * @return List of all jobs matching the criteria
      */
     public static ArrayList<HashMap<String, String>> findByColumnAndValue(String column, String value) {
@@ -83,34 +85,34 @@ public class JobData {
 
         return jobs;
     }
+
     /**
-     * Fetch list of all values from loaded data,
-     * without duplicates, for a given column.
+     * Search all columns for the given term
      *
-     * @param field The column to retrieve values from
-     * @return List of all of the values of the given field
+     * @param value The search term to look for
+     * @return      List of all jobs with at least one field containing the value
      */
+    public static ArrayList<HashMap<String, String>> findByValue(String value) {
 
-    public static ArrayList<String> findByValue(String field){
-        ArrayList<String> searchTerm = new ArrayList <>();
+        // load data, if not already loaded
+        loadData();
 
-        ArrayList<String> values = new ArrayList<>();
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
 
         for (HashMap<String, String> row : allJobs) {
 
-            String aTerm = row.get(field);
+            for (String key : row.keySet()) {
+                String aValue = row.get(key);
 
-            if (!searchTerm.contains(aTerm)) {
-                searchTerm.add(aTerm);
+                if (aValue.toLowerCase().contains(value.toLowerCase())) {
+                    jobs.add(row);
+
+                    break;
+                }
             }
         }
-            return searchTerm;
-
+        return jobs;
     }
-
-
-
-
 
     /**
      * Read in data from a CSV file and store it in a list

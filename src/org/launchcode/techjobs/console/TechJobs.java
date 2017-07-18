@@ -1,10 +1,7 @@
 package org.launchcode.techjobs.console;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Created by LaunchCode
@@ -62,21 +59,25 @@ public class TechJobs {
                 System.out.println("\nSearch term: ");
                 String searchTerm = in.nextLine();
 
-                while (true) {
-                    if (searchField.equals("all")) {
 
-                        System.out.println("Search all fields not yet implemented.");
-                    }
-                    }else (!searchField.equals("all")) {
+                if (searchField.equals("all")) {
+                   // ArrayList<HashMap<String, String>> allResults = JobData.findByValue(searchTerm);
+                    printJobs(JobData.findByValue(searchTerm));
 
-                    if (searchField.equals(searchTerm)) {
+                } else {
+                    ArrayList<String> results = JobData.findAll(searchField);
+                    if (results.contains(searchTerm)) {
                         printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
+                    } else {
+                        System.out.println(searchTerm + " is not found in " + searchField + ". Please search again.");
                     }
-
                 }
+
             }
         }
     }
+
+
 
     // ﻿Returns the key of the selected item from the choices Dictionary
     private static String getUserSelection(String menuHeader, HashMap<String, String> choices) {
@@ -120,13 +121,15 @@ public class TechJobs {
     // Print a list of jobs
     private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
 
-        //System.out.println("printJobs is not implemented yet");
+
         for (HashMap<String, String> job : someJobs) {
+
             System.out.println("******");
 
             for (Map.Entry<String, String> choice : job.entrySet()) {
                 System.out.println(choice.getKey() + " : " + choice.getValue());
             }
+            System.out.println("******");
         }
     }
 }
